@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect
+from flask import render_template, url_for, flash, redirect, request
 from hirbate import app, bcrypt, db
 from hirbate.forms import RegistrationForm, LoginForm
 from hirbate.models import User, Car
@@ -32,14 +32,18 @@ def login():
             print("User exist")
             login_user(user, remember=form.remember.data)
             flash("You have sucessfully logged in", "success")
-            return redirect(url_for('home'))
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
-            flash("Please check your email or password", "error")
+            flash("Please check your email or password", "warning")
     return render_template('login.html', form=form, title='Log in')
 
 @app.route('/logout')
-@login_required
 def logout():
-    print(current_user.username)
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('home'))
+
+@app.route('/account')
+@login_required
+def account():
+    return render_template('account.html')
