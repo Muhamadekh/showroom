@@ -45,10 +45,10 @@
                         {{form.remember.label (class="form-control-label")}}
                         {{ form.remember }}
                     </div>
+                    <small class="text-muted"> Need an account? <a href="{{ url_for ('register') }}" class="link">Sign Up</a></small>
                 </div>
             </fieldset>
         </form>
-        <small> Need an account? <a href="{{ url_for ('register') }}" class="link">Sign Up</a></small>
-    </div>
 
+    </div>
 {% endblock %}

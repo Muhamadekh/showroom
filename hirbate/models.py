@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
+    image_file = db.Column(db.String, nullable=False, default='default.jpg')
     reference = db.relationship('Car', backref='Owner', lazy=True)
 
 
