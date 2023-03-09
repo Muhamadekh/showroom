@@ -2,17 +2,13 @@
 {% block content %}
     <div class="container mt-2">
         <legend class="border-bottom mb-4 mt-4">Account Info</legend>
-        <div class="row">
+        <div class="row info-content">
             <div class="col-md-2">
-                <div class="rounded-circle">
-                    <img src="{{ image_file }}">
-                </div>
+                <img class="rounded-circle" src="{{ image_file }}">
             </div>
             <div class="col-md-2">
-                <div class="content-section">
-                    <h6>Username: {{ current_user.username }}</h6>
-                    <p>Email: {{ current_user.email }}</p>
-                </div>
+                <p>Username: {{ current_user.username }}</p>
+                <p>Email: {{ current_user.email }}</p>
             </div>
         </div>
 

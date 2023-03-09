@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from hirbate import app, bcrypt, db
-from hirbate.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from hirbate.forms import RegistrationForm, LoginForm, UpdateAccountForm, SellCarForm
 from hirbate.models import User, Car
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -13,6 +13,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 def home():
 
     return render_template('home.html', title='Home Page')
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -25,6 +26,7 @@ def register():
         flash(f'An account has been created for {form.username.data} suscessfully!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Sign Up', form=form)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -41,11 +43,11 @@ def login():
             flash("Please check your email or password", "warning")
     return render_template('login.html', form=form, title='Log in')
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('home'))
-
 
 
 def save_picture(form_picture):
@@ -54,13 +56,13 @@ def save_picture(form_picture):
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(app.root_path, 'static/profile_pictures', picture_fn)
 
-
     output_size = (125, 125)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
 
     return picture_fn
+
 
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
@@ -81,3 +83,16 @@ def account():
 
     image_file = url_for('static', filename='profile_pictures/' + current_user.image_file)
     return render_template('account.html', form=form, title='Account Page', image_file=image_file)
+
+
+@app.route('/sell_car', methods=['GET', 'POST'])
+@login_required
+def sell_car():
+    form = SellCarForm()
+    if form.validate_on_submit():
+        car = Car(name=form.name.data, mileage=form.mileage.data, price=form.price.data, user_id=current_user.id)
+        db.session.add(car)
+        db.session.commit()
+        flash('Your successfully uploaded your car', 'success')
+        return redirect(url_for('home'))
+    return render_template('sell_car.html', title='Sell a car', form=form)

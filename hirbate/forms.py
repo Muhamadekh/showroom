@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from hirbate.models import User
 from flask_login import current_user
@@ -12,7 +12,6 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=4)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign Up')
-
 
     def validate_username (self, username):
         user = User.query.filter_by(username=username.data).first()
@@ -30,8 +29,6 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=4)])
     submit = SubmitField('Login')
     remember = BooleanField('Remember Me')
-
-
 
 
 class UpdateAccountForm(FlaskForm):
@@ -52,3 +49,10 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('This email is taken. Please choose another one.')
+
+
+class SellCarForm(FlaskForm):
+    name = StringField('Car type', validators=[DataRequired()])
+    mileage = IntegerField('Mileage', validators=[DataRequired()])
+    price = FloatField('Price', validators=[DataRequired()])
+    submit = SubmitField('Upload')
