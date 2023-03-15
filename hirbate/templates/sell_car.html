@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
     <div class="container form-group mt-4 mb-4">
-        <form action="" method="POST">
+        <form action="" method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4 mt-4">Register Today</legend>
@@ -50,6 +50,21 @@
                         {% endif %}
                     </div>
                 </div>
+                <div>
+                    <div class="col-md-4 mt-2">
+                        {{ form.car_photos.label }}
+                        {% if form.car_photos.errors %}
+                            {{ form.car_photos (class="form-control-file")}}
+                            {% for error in form.car_photos.errors %}
+                                <div class="text-danger">
+                                    {{ error}}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {{ form.car_photos (class="form-control-file")}}
+                        {% endif %}
+                    </div>
+                    </div>
                 <div>
                     <div class="col-md-4">
                         {{ form.submit (class="btn btn-outline-info")}}

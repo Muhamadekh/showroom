@@ -32,7 +32,6 @@ class LoginForm(FlaskForm):
 
 
 class UpdateAccountForm(FlaskForm):
-
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     picture = FileField('Upload Profile Photo', validators=[FileAllowed(['jpg', 'png'])])
@@ -55,4 +54,5 @@ class SellCarForm(FlaskForm):
     name = StringField('Car type', validators=[DataRequired()])
     mileage = IntegerField('Mileage', validators=[DataRequired()])
     price = FloatField('Price', validators=[DataRequired()])
+    car_photos = FileField('Upload Car Photos', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Upload')

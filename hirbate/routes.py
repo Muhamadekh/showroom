@@ -85,14 +85,37 @@ def account():
     return render_template('account.html', form=form, title='Account Page', image_file=image_file)
 
 
+def save_car_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/car_photos', picture_fn)
+
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
+
 @app.route('/sell_car', methods=['GET', 'POST'])
 @login_required
 def sell_car():
     form = SellCarForm()
     if form.validate_on_submit():
-        car = Car(name=form.name.data, mileage=form.mileage.data, price=form.price.data, user_id=current_user.id)
+        picture_file = save_car_picture(form.car_photos.data)
+        car = Car(name=form.name.data, mileage=form.mileage.data, price=form.price.data, user_id=current_user.id,
+                  photo=picture_file)
         db.session.add(car)
         db.session.commit()
         flash('Your successfully uploaded your car', 'success')
         return redirect(url_for('home'))
     return render_template('sell_car.html', title='Sell a car', form=form)
+
+@app.route('/buy_car', methods=['GET', 'POST'])
+def buy_car():
+    cars = Car.query.all()
+    if cars:
+        return render_template('buy_car.html', cars=cars)
+    return redirect(url_for('home'))
