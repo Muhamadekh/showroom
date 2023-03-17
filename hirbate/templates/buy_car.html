@@ -1,14 +1,17 @@
 {% extends 'layout.html'%}
 {% block content %}
+  <div class="container">
+      <input type="text" id="search-box" placeholder="Search cars here">
+      <button id="search-btn">Search</button>
+  </div>
   <div class="row">
       {% for car in cars %}
-            <div class="col-sm-4">
+            <div class="col-sm">
                   <div class="card">
                       <img class="card-img-top img-thumbnail" src="{{ url_for('static', filename='car_photos/' + car.photo) }}">
                       <div class="card-body">
-                        <h5 class="card-title">Tye: {{ car.name }}</h5>
-                        <h6 class="card-text">Price: {{ car.price }}</h6>
-                        <h6 class="card-text">mileage: {{ car.mileage }}</h6>
+                        <h5 class="card-title">Type: {{ car.name }}<h6 class="card-text">Price: {{ car.price }}
+                        <span class="dot"></span>Mileage: {{ car.mileage }}</h6></h5>
                         <a href="#" class="btn btn-primary">Learn More</a>
                       </div>
                   </div>
