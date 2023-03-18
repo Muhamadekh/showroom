@@ -17,9 +17,9 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String, nullable=False, default='default.jpg')
     reference = db.relationship('Car', backref='Owner', lazy=True)
 
-
     def __repr__(self):
         return f'User({self.username}, {self.email})'
+
 
 class Car(db.Model):
     id = db.Column(db.Integer, primary_key=True)

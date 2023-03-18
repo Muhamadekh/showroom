@@ -8,14 +8,16 @@
   max-height: 300px;
 }
 
-.col-sm{
+.col-lg-3{
   text-align: center;
   margin-left: 0.5rem;
   width: 200px;
 }
 
 
-#search-box{
+#searchBox{
+  margin-top: 0.5rem;
+  margin-left: 0.8rem;
   width: 80%;
   margin-bottom: 15px;
 }

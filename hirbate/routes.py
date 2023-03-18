@@ -1,7 +1,7 @@
 import os
 import secrets
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, jsonify
 from hirbate import app, bcrypt, db
 from hirbate.forms import RegistrationForm, LoginForm, UpdateAccountForm, SellCarForm
 from hirbate.models import User, Car
@@ -113,9 +113,33 @@ def sell_car():
         return redirect(url_for('home'))
     return render_template('sell_car.html', title='Sell a car', form=form)
 
+
 @app.route('/buy_car', methods=['GET', 'POST'])
 def buy_car():
     cars = Car.query.all()
     if cars:
         return render_template('buy_car.html', cars=cars)
     return redirect(url_for('home'))
+
+
+@app.route('/livesearch', methods=['GET', 'POST'])
+def livesearch():
+    search = request.json["text"]
+    print(search)
+    results = Car.query.filter(Car.name.like(f"{search}%")).all()
+    car_objects = []
+    for result in results:
+        car = {
+            "id": result.id,
+            "name": result.name,
+            "mileage": result.mileage,
+            "price": result.price,
+            "photo": url_for('static', filename='car_photos/' + result.photo, _external=True),
+            "user_id": result.user_id
+        }
+        car_objects.append(car)
+
+    return jsonify(car_objects)
+
+
+
